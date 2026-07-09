@@ -820,8 +820,8 @@ fun HeaderMobileCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "VitalWear Orbit",
-                    color = Color.White,
+                    text = "VitalWear Orbit pruebas",
+                    color = Color.Yellow,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -930,8 +930,8 @@ fun SummarySection(
             Text(
                 text = "Resumen general",
                 color = Color.White,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Normal
             )
 
             Spacer(modifier = Modifier.height(12.dp))
