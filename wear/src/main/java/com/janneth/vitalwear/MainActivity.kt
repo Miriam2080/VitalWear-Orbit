@@ -577,7 +577,7 @@ class MainActivity : ComponentActivity(),
             "/photo_taken" -> {
                 runOnUiThread {
                     cameraReady = true
-                    addEvent("Cámara lista")
+                    addEvent("Cámara abirta")
                     showNotification(
                         message = "Cámara lista",
                         type = NotificationType.SUCCESS
