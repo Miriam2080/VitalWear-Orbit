@@ -1267,7 +1267,7 @@ fun EventsScreen(
         item {
             HeaderSection(
                 title = "Eventos",
-                subtitle = "Historial rápido",
+                subtitle = "Historial",
                 onHome = onHome
             )
         }
