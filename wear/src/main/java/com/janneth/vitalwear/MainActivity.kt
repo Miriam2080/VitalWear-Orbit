@@ -1155,7 +1155,7 @@ fun MotionScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             ActionButton(
-                text = "Enviar SOS",
+                text = "Enviar mensaje de  SOS",
                 color = Color(0xFFFF5252),
                 textColor = Color.White,
                 onClick = onSosClick
