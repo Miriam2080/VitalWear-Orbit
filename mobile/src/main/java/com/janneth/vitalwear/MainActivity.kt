@@ -1169,61 +1169,219 @@ fun MotionMobileSection(
 ) {
     val acc = acceleration ?: 0f
 
-    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    val movementColor = when {
+        acc >= 25f -> Color(0xFFFF5252)
+        acc >= 15f -> Color(0xFFFFC107)
+        else -> Color(0xFF00E676)
+    }
+
+    val riskColor = when {
+        riskScore >= 70 -> Color(0xFFFF5252)
+        riskScore >= 40 -> Color(0xFFFFC107)
+        else -> Color(0xFF00E676)
+    }
+
+    val riskText = when {
+        riskScore >= 70 -> "Riesgo alto"
+        riskScore >= 40 -> "Riesgo moderado"
+        else -> "Riesgo bajo"
+    }
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+
+        // Tarjeta principal del análisis
         GlassCard {
-            Text(
-                text = "Análisis de movimiento",
-                color = Color.White,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clip(CircleShape)
+                        .background(movementColor.copy(alpha = 0.18f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Sensors,
+                        contentDescription = "Análisis de movimiento",
+                        tint = movementColor,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.width(14.dp))
 
-            Text(
-                text = motionStatus,
-                color = when {
-                    acc >= 25f -> Color(0xFFFF5252)
-                    acc >= 15f -> Color(0xFFFFC107)
-                    else -> Color(0xFF00E676)
-                },
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Análisis de movimiento",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = "Monitoreo del acelerómetro",
+                        color = Color.White.copy(alpha = 0.65f),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(movementColor.copy(alpha = 0.12f))
+                    .padding(14.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "Estado actual",
+                        color = Color.White.copy(alpha = 0.65f),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = motionStatus,
+                        color = movementColor,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+
+        // Métricas de aceleración y riesgo
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            GlassCard(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Aceleración",
+                    color = Color.White.copy(alpha = 0.65f),
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Text(
+                    text = "${acc.toInt()} m/s²",
+                    color = Color(0xFF80DEEA),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            GlassCard(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Nivel de riesgo",
+                    color = Color.White.copy(alpha = 0.65f),
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Text(
+                    text = "$riskScore%",
+                    color = riskColor,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        // Indicador visual del riesgo
+        GlassCard {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Evaluación de riesgo",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50))
+                        .background(riskColor.copy(alpha = 0.18f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = riskText,
+                        color = riskColor,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            LinearProgressIndicator(
+                progress = riskScore.coerceIn(0, 100) / 100f,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(50))
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Aceleración detectada: ${acc.toInt()}",
-                color = Color.White.copy(alpha = 0.75f)
-            )
-
-            Text(
-                text = "Riesgo calculado: $riskScore%",
-                color = Color.White.copy(alpha = 0.75f)
+                text = "El nivel se calcula con los datos recibidos desde el reloj.",
+                color = Color.White.copy(alpha = 0.65f),
+                style = MaterialTheme.typography.bodySmall
             )
         }
 
-        SensorMobileCard(
-            icon = Icons.Rounded.Sensors,
-            title = "Acelerómetro",
-            value = "${acc.toInt()}",
-            color = Color(0xFFFFC107)
-        )
-
+        // Información de la función
         GlassCard {
-            Text(
-                text = "Función nueva",
-                color = Color(0xFF80DEEA),
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF80DEEA).copy(alpha = 0.18f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Sensors,
+                        contentDescription = "Información",
+                        tint = Color(0xFF80DEEA),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Detección inteligente",
+                    color = Color(0xFF80DEEA),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "El reloj interpreta el acelerómetro para detectar movimiento activo o movimiento brusco. Si existe riesgo, puede enviar una alerta SOS al teléfono.",
+                text = "El reloj utiliza el acelerómetro para identificar movimiento activo o movimientos bruscos. Cuando detecta un nivel de riesgo, puede enviar una alerta SOS al teléfono.",
                 color = Color.White.copy(alpha = 0.80f),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
