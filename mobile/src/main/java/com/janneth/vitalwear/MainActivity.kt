@@ -348,7 +348,7 @@ class MainActivity : AppCompatActivity(),
 
                     Toast.makeText(
                         this,
-                        "SOS recibido desde el reloj",
+                        "SOS recibido desde el ⌚",
                         Toast.LENGTH_LONG
                     ).show()
                 }
